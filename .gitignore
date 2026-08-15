@@ -1,0 +1,14 @@
+# 辞書のディスク。README の既定の置き場所がここなので、うっかり commit しない
+# ように名指しで無視する。実体でも symlink でもよい。
+/eb
+/appendix
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+.DS_Store
