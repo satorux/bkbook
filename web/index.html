@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja" data-eb="eb/">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>bkbook</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📖%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+  <form class="search" id="search" autocomplete="off">
+    <a class="logo" id="logo" href="#" title="最初に戻る">bkbook</a>
+    <input id="q" type="search" placeholder="辞書を引く" autofocus autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-label="検索語">
+    <button type="button" class="mode" id="mode" title="見出し語 / 本文 の切り替え" aria-pressed="false">見出し</button>
+    <button type="button" class="icon" id="settings-button" title="辞書の設定" aria-label="辞書の設定">⚙</button>
+  </form>
+  <div class="status" id="status" aria-live="polite"></div>
+</header>
+
+<main class="main" id="main">
+  <section class="list" id="list" aria-label="見出し語の一覧">
+    <div class="list-head" id="list-head"></div>
+    <div class="list-body" id="list-body"></div>
+    <div class="hint" id="hint">
+      <p>検索語を入れると、開いているすべての辞書を同時に引きます。</p>
+      <p><kbd>*ization</kbd> で <em>ization</em> で終わる語を、<b>本文</b> に切り替えると見出しではなく本文中の語を探します。</p>
+    </div>
+  </section>
+
+  <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" aria-label="ペインの幅" title="ドラッグで幅を変える。ダブルクリックで既定に戻す"></div>
+
+  <section class="entry" id="entry" aria-label="本文">
+    <div class="entry-bar">
+      <button type="button" class="icon back" id="back" aria-label="戻る">‹</button>
+      <div class="entry-title" id="entry-title"></div>
+    </div>
+    <article class="entry-body" id="entry-body"></article>
+  </section>
+</main>
+
+<dialog class="sheet" id="settings">
+  <form method="dialog">
+    <h2>辞書</h2>
+    <p class="muted">上にあるものほど先に検索され、一覧の上に来ます。</p>
+    <ol class="books" id="books"></ol>
+    <div class="sheet-actions">
+      <button type="button" id="settings-reset">既定に戻す</button>
+      <button type="submit" class="primary">閉じる</button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

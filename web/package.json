@@ -1,0 +1,6 @@
+{
+  "name": "bkbook-web",
+  "private": true,
+  "type": "module",
+  "description": "bkbook の JavaScript 版。EB / EPWING 辞書を HTTP Range リクエストで読む。"
+}

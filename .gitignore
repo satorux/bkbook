@@ -2,6 +2,7 @@
 # ように名指しで無視する。実体でも symlink でもよい。
 /eb
 /appendix
+/web/eb
 
 # Python
 __pycache__/
