@@ -73,12 +73,11 @@ bkbook/
 `?eb=https://example.net/eb/` で指す。サーバーは静的ファイルを Range
 リクエスト付きで返せればよく、CGI は要らない。
 
-手元で試すときは、`web/eb` を辞書のディレクトリへのシンボリックリンクにして
-（リポジトリ直下の `eb` があれば `ln -s ../eb web/eb`）、開発用サーバーを
-`web/` で起こす。`manifest.txt` はサーバーがその場で作る。
+手元で試すときは、開発用サーバーを `web/` で起こし、`--eb` で辞書の
+ディレクトリを `/eb/` に割り当てる。`manifest.txt` はサーバーがその場で作る。
 
 ```console
-$ node web/test/serve.mjs web 8000
+$ node web/test/serve.mjs web 8000 --eb ~/eb
 ```
 
 ## 実機で測る

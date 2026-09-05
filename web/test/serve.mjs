@@ -4,11 +4,15 @@
 /**
  * Range リクエストに応える、開発用の静的ファイルサーバー。
  *
- *     $ node web/test/serve.mjs [directory] [port]
+ *     $ node web/test/serve.mjs [directory] [port] [--eb dictionaries]
  *
  * Python の http.server は Range を解さないので、ブラウザ版を手元で試すには
  * これを使う。`manifest.txt` がなければディレクトリを歩いて動的に作る。
  * 本番のさくらでは `find . -type f > manifest.txt` で同じものを置く。
+ *
+ * `--eb` で辞書のディレクトリを `/eb/` に割り当てる。本番では `eb/` を
+ * `index.html` の下に置くが、手元でリポジトリの中にコピーやリンクを
+ * 作らずに済むように。
  */
 
 import { createServer } from "node:http";
@@ -16,8 +20,11 @@ import { createReadStream } from "node:fs";
 import { readdir, stat } from "node:fs/promises";
 import { join, normalize, resolve, sep } from "node:path";
 
-const root = resolve(process.argv[2] || ".");
-const port = Number(process.argv[3] || 8000);
+const args = process.argv.slice(2);
+const ebAt = args.indexOf("--eb");
+const eb = ebAt >= 0 ? resolve(args.splice(ebAt, 2)[1]) : null;
+const root = resolve(args[0] || ".");
+const port = Number(args[1] || 8000);
 
 export async function walk(directory, prefix = "") {
   const out = [];
@@ -36,8 +43,14 @@ const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; ch
 createServer(async (request, response) => {
   const url = new URL(request.url, "http://localhost");
   const path = decodeURIComponent(url.pathname);
-  const file = normalize(join(root, path));
-  if (!file.startsWith(root + sep) && file !== root) {
+  let base = root;
+  let relative = path;
+  if (eb !== null && (path === "/eb" || path.startsWith("/eb/"))) {
+    base = eb;
+    relative = path.slice("/eb".length) || "/";
+  }
+  const file = normalize(join(base, relative));
+  if (!file.startsWith(base + sep) && file !== base) {
     response.writeHead(403).end();
     return;
   }
@@ -93,4 +106,4 @@ createServer(async (request, response) => {
   response.writeHead(200, { "Content-Type": type, "Content-Length": info.size, "Accept-Ranges": "bytes" });
   if (request.method === "HEAD") return response.end();
   createReadStream(target).pipe(response);
-}).listen(port, () => console.log(`serving ${root} at http://localhost:${port}/`));
+}).listen(port, () => console.log(`serving ${root} at http://localhost:${port}/${eb ? ` (eb: ${eb})` : ""}`));
